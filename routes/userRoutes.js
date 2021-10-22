@@ -48,8 +48,8 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const { name, password } = req.body;
-    const user = await User.findOne({ $or: [{ name }, { email: name }] });
+    const { email, password } = req.body;
+    const user = await User.findOne({email});
     if (!user) {
       return res.status(404).json({
         status: 'fail',
