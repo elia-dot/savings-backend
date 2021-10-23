@@ -16,7 +16,7 @@ module.exports.createSendToken = (user, req, res) => {
     httpOnly: true,
   });
 
-  res.status(201).json({
+  res.status(200).json({
     status: 'success',
     token,
     data: {
