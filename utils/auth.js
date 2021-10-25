@@ -4,7 +4,12 @@ const { promisify } = require('util');
 
 module.exports.auth = async (req, res, next) => {
   let token;
-  if (req.headers.cookie) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.headers.cookie) {
     token = req.headers.cookie.split('=')[1];
   }
   if (!token) {
