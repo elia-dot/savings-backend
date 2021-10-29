@@ -33,7 +33,7 @@ router.post('/signup', async (req, res) => {
         status: 'fail',
         errors: Object.keys(error.errors).map(
           (key) => (error.errors[key] = error.errors[key].message)
-        ),
+        )[0],
       });
     } else {
       return res.status(500).json({
