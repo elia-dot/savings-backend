@@ -26,7 +26,7 @@ router.post('/signup', async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({
         status: 'fail',
-        error: 'User allready exist with this email',
+        errors: 'User already exist with this email!',
       });
     } else if (error._message.includes('validation')) {
       return res.status(400).json({
@@ -53,14 +53,14 @@ router.post('/login', async (req, res) => {
     if (!user) {
       return res.status(404).json({
         status: 'fail',
-        error: 'User not exist',
+        error: 'User do not exist!',
       });
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
         status: 'fail',
-        error: 'Invalid Credentials',
+        error: 'Invalid email or password!',
       });
     }
     createSendToken(user, req, res);
