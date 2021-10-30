@@ -40,4 +40,12 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+userSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'goals',
+  });
+
+  next();
+});
+
 module.exports = User = mongoose.model('User', userSchema);
