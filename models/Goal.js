@@ -11,6 +11,9 @@ const goalSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please enter a price'],
   },
+  icon : {
+    type: String
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
