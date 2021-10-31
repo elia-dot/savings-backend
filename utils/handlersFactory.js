@@ -116,7 +116,7 @@ module.exports.updateOne = (Model) => async (req, res) => {
 
 module.exports.deleteOne = (Model) => async (req, res) => {
   try {
-    const doc = await Model.findOneAndDelete(req.params.id);
+    const doc = await Model.findByIdAndDelete(req.params.id);
     if (!doc) {
       return res.status(404).json({
         status: 'fail',
