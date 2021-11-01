@@ -46,7 +46,9 @@ module.exports.getOneById = (Model) => async (req, res) => {
 
 module.exports.getAllByUser = (Model) => async (req, res) => {
   try {
-    const docs = await Model.find({ user: req.params.userId }).sort({createdAt: -1});
+    const docs = await Model.find({ user: req.params.userId }).sort({
+      createdAt: -1,
+    });
     if (!docs) {
       return res.status(404).json({
         status: 'fail',
@@ -122,8 +124,12 @@ module.exports.deleteOne = (Model) => async (req, res) => {
         error: `doc not exist`,
       });
     }
-    console.log(req.baseUrl);
+    if (req.baseUrl === '/savings') {
+      const user = await User.findById(req.user._id);
+      user.saving -= this.amount;
 
+      await user.save();
+    }
     res.status(200).json({
       status: 'success',
       data: null,
