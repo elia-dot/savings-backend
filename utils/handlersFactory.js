@@ -126,7 +126,7 @@ module.exports.deleteOne = (Model) => async (req, res) => {
     }
     if (req.baseUrl === '/savings') {
       const user = await User.findById(req.user._id);
-      user.saving -= this.amount * 1;
+      user.saving -= doc.amount * 1;
 
       await user.save();
     }
