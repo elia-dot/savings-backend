@@ -46,8 +46,8 @@ module.exports.getOneById = (Model) => async (req, res) => {
 
 module.exports.getAllByUser = (Model) => async (req, res) => {
   try {
-    console.log(req.params.userId);
-    const docs = await Model.find({ user: req.params.userId }).sort({createdAt: -1});
+    console.log("id:", req.params.userId);
+    const docs = await Model.find({ user: req.params.userId });
     if (!docs) {
       return res.status(404).json({
         status: 'fail',
@@ -116,7 +116,7 @@ module.exports.updateOne = (Model) => async (req, res) => {
 
 module.exports.deleteOne = (Model) => async (req, res) => {
   try {
-    const doc = await Model.findOneAndDelete(req.params.id);
+    const doc = await Model.findByIdAndDelete(req.params.id);
     if (!doc) {
       return res.status(404).json({
         status: 'fail',
