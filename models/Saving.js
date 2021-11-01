@@ -6,7 +6,7 @@ const savingSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Amount is required'],
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },
