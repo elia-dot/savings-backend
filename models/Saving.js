@@ -23,12 +23,11 @@ savingSchema.post('save', async function () {
   await user.save();
 });
 
-savingSchema.post('findOneAndDelete', async function (next) {
+savingSchema.post('findOneAndDelete', { document: true }, async function () {
   const user = await User.findById(this.user);
   user.saving -= this.amount;
 
   await user.save();
-  next()
 });
 
 module.exports = Saving = mongoose.model('Saving', savingSchema);
