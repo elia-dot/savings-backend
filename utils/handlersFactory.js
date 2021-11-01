@@ -46,8 +46,7 @@ module.exports.getOneById = (Model) => async (req, res) => {
 
 module.exports.getAllByUser = (Model) => async (req, res) => {
   try {
-    console.log("id:", req.params.userId);
-    const docs = await Model.find({ user: req.params.userId });
+    const docs = await Model.find({ user: req.params.userId }).sort({createdAt: -1});
     if (!docs) {
       return res.status(404).json({
         status: 'fail',
