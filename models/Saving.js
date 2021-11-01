@@ -23,7 +23,7 @@ savingSchema.post('save', async function () {
   await user.save();
 });
 
-savingSchema.pre('findOneAndDelete', async function (next) {
+savingSchema.post('findOneAndDelete', async function (next) {
   const user = await User.findById(this.user);
   user.saving -= this.amount;
 
