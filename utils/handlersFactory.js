@@ -122,6 +122,7 @@ module.exports.deleteOne = (Model) => async (req, res) => {
         error: `doc not exist`,
       });
     }
+    console.log(req);
     res.status(200).json({
       status: 'success',
       data: null,
