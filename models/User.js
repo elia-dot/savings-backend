@@ -38,6 +38,16 @@ const userSchema = new mongoose.Schema({
       ref: 'Goal',
     },
   ],
+  preferences: {
+    currency: {
+      type: String,
+      default: 'NIS',
+    },
+    notification: {
+      type: String,
+      default: 'never',
+    },
+  },
 });
 
 userSchema.pre(/^find/, function (next) {
