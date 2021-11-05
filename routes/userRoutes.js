@@ -81,8 +81,8 @@ router.post('/:id/preferences', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const { currency, notification } = req.body;
-    if (req.body.currency) user.currency = currency;
-    if (req.body.notification) user.notification = notification;
+    if (req.body.currency) user.preferences.currency = currency;
+    if (req.body.notification) user.preferences.notification = notification;
     const newUser = await user.save();
     return res.status(200).json({
       status: 'success',
