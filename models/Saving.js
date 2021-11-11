@@ -14,6 +14,10 @@ const savingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
+  target : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Goal'
+  }
 });
 
 savingSchema.post('save', async function () {
