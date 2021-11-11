@@ -32,4 +32,5 @@ goalSchema.post('save', async function () {
   await user.save();
 });
 
+
 module.exports = Goal = mongoose.model('Goal', goalSchema);

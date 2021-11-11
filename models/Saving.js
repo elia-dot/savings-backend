@@ -14,10 +14,10 @@ const savingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  target : {
+  target: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Goal'
-  }
+    ref: 'Goal',
+  },
 });
 
 savingSchema.post('save', async function () {
@@ -27,12 +27,9 @@ savingSchema.post('save', async function () {
   await user.save();
 });
 
-// savingSchema.post('findOneAndDelete', async function () {
-//   const user = await User.findById(this.user);
-//   console.log(user);
-//   user.saving -= this.amount;
-
-//   await user.save();
-// });
+savingSchema.pre(/^find/, async function (next) {
+  this.populate('target');
+  next();
+});
 
 module.exports = Saving = mongoose.model('Saving', savingSchema);
