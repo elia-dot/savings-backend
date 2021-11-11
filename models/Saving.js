@@ -27,7 +27,7 @@ savingSchema.post('save', async function () {
   await user.save();
 });
 
-savingSchema.pre(/^find/, async function (next) {
+savingSchema.pre('save', async function (next) {
   this.populate('target');
   next();
 });
