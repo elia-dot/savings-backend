@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('./User');
+const Child = require('./Child');
 
 const savingSchema = new mongoose.Schema({
   amount: {
@@ -12,7 +12,7 @@ const savingSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Child',
   },
   target: {
     type: mongoose.Schema.Types.ObjectId,
@@ -21,7 +21,7 @@ const savingSchema = new mongoose.Schema({
 });
 
 savingSchema.post('save', async function () {
-  const user = await User.findById(this.user);
+  const user = await Child.findById(this.user);
   user.saving += this.amount;
 
   await user.save();

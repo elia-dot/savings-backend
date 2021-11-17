@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('./User');
+const Child = require('./Child');
 
 const profitSchema = new mongoose.Schema({
   amount: {
@@ -11,12 +11,12 @@ const profitSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'Child',
   },
 });
 
 profitSchema.post('save', async function () {
-  const user = await User.findById(this.user);
+  const user = await Child.findById(this.user);
   user.revenue += this.amount;
   await user.save();
 });

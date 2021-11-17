@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const { promisify } = require('util');
+const Child = require('../models/Child');
+const Parent = require('../models/Parent');
 
 module.exports.auth = async (req, res, next) => {
   let token;
@@ -18,9 +19,12 @@ module.exports.auth = async (req, res, next) => {
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  const user = await User.findById(decoded.id);
+  let user = await Parent.findById(decoded.id);
   if (!user) {
-    return res.status(403).json({ message: 'Unauthorized!' });
+    user = await Child.findById(decoded.id);
+    if (!user) {
+      return res.status(403).json({ message: 'Unauthorized!' });
+    }
   }
 
   req.user = user;

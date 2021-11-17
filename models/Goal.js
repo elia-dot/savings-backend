@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-
-const User = require('./User');
+const Child = require('./Child');
 
 const goalSchema = new mongoose.Schema({
   title: {
@@ -20,12 +19,12 @@ const goalSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Child',
   },
 });
 
 goalSchema.post('save', async function () {
-  const user = await User.findById(this.user);
+  const user = await Child.findById(this.user);
   user.goals = [...user.goals, this._id];
 
   await user.save();

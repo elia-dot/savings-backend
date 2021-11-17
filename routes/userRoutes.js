@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const { createSendToken } = require('../utils/token');
 
+
+const Parent = require('../models/Parent');
+const { createSendToken } = require('../utils/token');
+const { auth } = require('../utils/auth');
 const {
   getOneById,
   updateOne,
   deleteOne,
 } = require('../utils/handlersFactory');
+const Child = require('../models/Child');
 
 //signup
 
@@ -19,7 +22,7 @@ router.post('/signup', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
 
     const hashedPassword = await bcrypt.hash(password, salt);
-    const newUser = await User.create({
+    const newUser = await Parent.create({
       name,
       email,
       password: hashedPassword,
@@ -53,7 +56,7 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await Parent.findOne({ email });
     if (!user) {
       return res.status(404).json({
         status: 'fail',
@@ -77,17 +80,22 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/:id/preferences', async (req, res) => {
+//add Child
+
+router.post('/add-child', auth, async (req, res) => {
+  const {parent} = req.user._id
+  const {username, name, password,revenue}
   try {
-    const user = await User.findById(req.params.id);
-    const { currency, notification } = req.body;
-    if (req.body.currency) user.preferences.currency = currency;
-    if (req.body.notification) user.preferences.notification = notification;
-    const newUser = await user.save();
-    return res.status(200).json({
-      status: 'success',
-      data: newUser,
-    });
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  const newChild = Child.create({
+    name,
+    username,
+    password: hashedPassword,
+    revenue,
+    parent
+  })
+  createSendToken(newChild, req, res);
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -95,10 +103,18 @@ router.post('/:id/preferences', async (req, res) => {
       error: 'Server Error',
     });
   }
-});
+})
 
-router.get('/:id', getOneById(User));
-router.patch('/:id', updateOne(User));
-router.delete('/:id', deleteOne(User));
+//parent
+
+router.get('/:id', getOneById(Parent));
+router.patch('/:id', updateOne(Parent));
+router.delete('/:id', deleteOne(Parent));
+
+//child
+
+router.get('/child/:id', getOneById(Child));
+router.patch('/child/:id', updateOne(Child));
+router.delete('/child/:id', deleteOne(Child));
 
 module.exports = router;

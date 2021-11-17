@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const parentSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please enter a name'],
@@ -25,40 +25,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please enter a password'],
   },
-  role: {
-    type: String,
-    default: 'parent',
-  },
   children: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Child',
     },
   ],
-  saving: {
-    type: Number,
-    default: 0,
-  },
-  goals: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Goal',
-    },
-  ],
-  revenue: {
-    type: Number,
-    default: 0
-  },
 });
 
 userSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'goals',
-  }).populate({
     path: 'children',
   });
-
   next();
 });
 
-module.exports = User = mongoose.model('User', userSchema);
+module.exports = Parent = mongoose.model('Parent', parentSchema);
