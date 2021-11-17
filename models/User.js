@@ -25,9 +25,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please enter a password'],
   },
-  image: {
+  role: {
     type: String,
+    default: 'parent',
   },
+  children: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   saving: {
     type: Number,
     default: 0,
@@ -38,21 +45,17 @@ const userSchema = new mongoose.Schema({
       ref: 'Goal',
     },
   ],
-  preferences: {
-    currency: {
-      type: String,
-      default: 'NIS',
-    },
-    notification: {
-      type: String,
-      default: 'never',
-    },
+  revenue: {
+    type: Number,
+    default: 0
   },
 });
 
 userSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'goals',
+  }).populate({
+    path: 'children',
   });
 
   next();

@@ -26,7 +26,6 @@ const goalSchema = new mongoose.Schema({
 
 goalSchema.post('save', async function () {
   const user = await User.findById(this.user);
-  console.log(user.goals);
   user.goals = [...user.goals, this._id];
 
   await user.save();
