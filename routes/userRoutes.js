@@ -53,13 +53,12 @@ router.post('/signup', async (req, res) => {
 //login
 
 router.post('/login', async (req, res) => {
-  console.log(req.body);
   try {
     const { email, username, password } = req.body;
-
+    console.log(email, username, password);
     let user;
 
-    if (!username) {
+    if (email) {
       user = await Parent.findOne({ email });
       if (!user) {
         return res.status(404).json({
@@ -67,7 +66,7 @@ router.post('/login', async (req, res) => {
           error: 'User do not exist!',
         });
       }
-    } else if (!email) {
+    } else if (username) {
       user = await Child.findOne({ username });
       if (!user) {
         return res.status(404).json({
