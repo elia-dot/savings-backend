@@ -14,22 +14,12 @@ const savingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Child',
   },
-  target: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Goal',
-  },
 });
 
 savingSchema.post('save', async function () {
   const user = await Child.findById(this.user);
   user.saving += this.amount;
-
   await user.save();
-});
-
-savingSchema.pre(/^find/, function (next) {
-  this.populate('target');
-  next();
 });
 
 module.exports = Saving = mongoose.model('Saving', savingSchema);

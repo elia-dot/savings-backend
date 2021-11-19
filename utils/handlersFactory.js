@@ -1,5 +1,3 @@
-const User = require('../models/User');
-
 module.exports.createOne = (Model) => async (req, res) => {
   try {
     const doc = await Model.create({ ...req.body, user: req.user._id });

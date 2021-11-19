@@ -32,9 +32,13 @@ const childSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  type : {
+    type: String,
+    default: 'child'
+  }
 });
 
-userSchema.pre(/^find/, function (next) {
+childSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'goals',
   });

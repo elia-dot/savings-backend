@@ -31,9 +31,13 @@ const parentSchema = new mongoose.Schema({
       ref: 'Child',
     },
   ],
+  type : {
+    type: String,
+    default: 'parent'
+  }
 });
 
-userSchema.pre(/^find/, function (next) {
+parentSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'children',
   });

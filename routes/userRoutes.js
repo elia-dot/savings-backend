@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 
-
 const Parent = require('../models/Parent');
 const { createSendToken } = require('../utils/token');
 const { auth } = require('../utils/auth');
@@ -54,15 +53,30 @@ router.post('/signup', async (req, res) => {
 //login
 
 router.post('/login', async (req, res) => {
+  console.log(req.body);
   try {
-    const { email, password } = req.body;
-    const user = await Parent.findOne({ email });
-    if (!user) {
-      return res.status(404).json({
-        status: 'fail',
-        error: 'User do not exist!',
-      });
+    const { email, username, password } = req.body;
+
+    let user;
+
+    if (!username) {
+      user = await Parent.findOne({ email });
+      if (!user) {
+        return res.status(404).json({
+          status: 'fail',
+          error: 'User do not exist!',
+        });
+      }
+    } else if (!email) {
+      user = await Child.findOne({ username });
+      if (!user) {
+        return res.status(404).json({
+          status: 'fail',
+          error: 'User do not exist!',
+        });
+      }
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
@@ -83,19 +97,34 @@ router.post('/login', async (req, res) => {
 //add Child
 
 router.post('/add-child', auth, async (req, res) => {
-  const {parent} = req.user._id
-  const {username, name, password,revenue}
+  const parent = req.user._id;
+  const { username, name, password, revenue } = req.body;
+  if (req.user.type !== 'parent')
+    return res.status(400).json({
+      status: 'fail',
+      error: 'Unauthorized',
+    });
+  const parentDoc = await Parent.findById(parent);
   try {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  const newChild = Child.create({
-    name,
-    username,
-    password: hashedPassword,
-    revenue,
-    parent
-  })
-  createSendToken(newChild, req, res);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const newChild = await Child.create({
+      name,
+      username,
+      password: hashedPassword,
+      revenue,
+      parent,
+    });
+
+    const updatedChildren = { children: [...parentDoc.children, newChild._id] };
+    await Parent.findByIdAndUpdate(parent, updatedChildren);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        newChild,
+      },
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -103,7 +132,7 @@ router.post('/add-child', auth, async (req, res) => {
       error: 'Server Error',
     });
   }
-})
+});
 
 //parent
 
