@@ -19,7 +19,7 @@ router.post('/:id', auth, async (req, res) => {
   try {
     const saving = await Goal.create({ ...req.body, user: req.params.id });
     const childDoc = await Child.findById(req.params.id);
-    const updatedGoals = [saving._id, ...childDoc];
+    const updatedGoals = [saving._id, ...childDoc.goals];
     childDoc.goals = updatedGoals
     await childDoc.save()
 

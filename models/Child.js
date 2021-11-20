@@ -35,6 +35,10 @@ const childSchema = new mongoose.Schema({
   type : {
     type: String,
     default: 'child'
+  },
+  profit : {
+    type: Number,
+    default: 0
   }
 });
 
