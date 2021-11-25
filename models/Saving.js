@@ -18,6 +18,9 @@ const savingSchema = new mongoose.Schema({
     type: String,
     default: 'saving',
   },
+  description : {
+    type : String
+  }
 });
 
 savingSchema.post('save', async function () {
