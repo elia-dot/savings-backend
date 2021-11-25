@@ -14,15 +14,16 @@ const savingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Child',
   },
-  type : {
+  type: {
     type: String,
-    default : 'saving'
-  }
+    default: 'saving',
+  },
 });
 
 savingSchema.post('save', async function () {
   const user = await Child.findById(this.user);
   user.saving += this.amount;
+  if (this.type === 'profit') user.profit += this.amount;
   await user.save();
 });
 
