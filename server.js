@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express()
 
 const connectDb = require('./utils/conectDb')
+
 const userRouter = require('./routes/userRoutes')
 const goalRouter = require('./routes/goalRoutes')
 const savingRouter = require('./routes/savingRoutes')
