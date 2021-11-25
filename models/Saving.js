@@ -14,6 +14,10 @@ const savingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Child',
   },
+  type : {
+    type: String,
+    default : 'saving'
+  }
 });
 
 savingSchema.post('save', async function () {
