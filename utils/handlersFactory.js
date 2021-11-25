@@ -89,7 +89,7 @@ module.exports.getAll = (Model) => async (req, res) => {
 
 module.exports.updateOne = (Model) => async (req, res) => {
   try {
-    const doc = await Model.findOneAndUpdate(req.params.id, req.body, {
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
     if (!doc) {
