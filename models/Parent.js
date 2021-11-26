@@ -31,10 +31,10 @@ const parentSchema = new mongoose.Schema({
       ref: 'Child',
     },
   ],
-  type : {
+  type: {
     type: String,
-    default: 'parent'
-  }
+    default: 'parent',
+  },
 });
 
 parentSchema.pre(/^find/, function (next) {

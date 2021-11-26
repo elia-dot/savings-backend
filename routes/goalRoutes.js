@@ -8,7 +8,6 @@ const {
   getOneById,
   updateOne,
   deleteOne,
-  createOne,
   getAll,
   getAllByUser,
 } = require('../utils/handlersFactory');
@@ -17,14 +16,11 @@ const {
 
 router.post('/:id', auth, async (req, res) => {
   try {
-    const saving = await Goal.create({ ...req.body, user: req.params.id });
-    const childDoc = await Child.findById(req.params.id);
+    const goal = await Goal.create({ ...req.body, user: req.params.id });
 
     return res.status(201).json({
       status: 'success',
-      data: {
-        data: saving,
-      },
+      data: goal,
     });
   } catch (error) {
     console.log(error);
@@ -34,7 +30,6 @@ router.post('/:id', auth, async (req, res) => {
     });
   }
 });
-
 
 router.get('/', auth, getAll(Goal));
 router.get('/:id', auth, getOneById(Goal));

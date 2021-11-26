@@ -9,6 +9,7 @@ const connectDb = require('./utils/conectDb')
 const userRouter = require('./routes/userRoutes')
 const goalRouter = require('./routes/goalRoutes')
 const savingRouter = require('./routes/savingRoutes')
+const tasksRouter = require('./routes/tasksRoutes')
 
 app.use(express.json())
 app.use(cors());
@@ -19,6 +20,7 @@ connectDb()
 app.use('/users', userRouter)
 app.use('/goals', goalRouter)
 app.use('/savings', savingRouter)
+app.use('/tasks', tasksRouter)
 
 const PORT = process.env.PORT || 3000;
 

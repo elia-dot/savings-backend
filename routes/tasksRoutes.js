@@ -1,31 +1,25 @@
 const express = require('express');
-const Child = require('../models/Child');
 const router = express.Router();
-const Saving = require('../models/Saving');
+const Task = require('../models/Task');
 const { auth } = require('../utils/auth');
 
 const {
   getOneById,
   updateOne,
   deleteOne,
-  createOne,
   getAll,
   getAllByUser,
 } = require('../utils/handlersFactory');
 
-router.get('/', auth, getAll(Saving));
-router.get('/:id', auth, getOneById(Saving));
-router.get('/users/:userId', auth, getAllByUser(Saving));
-router.patch('/:id', auth, updateOne(Saving));
-router.delete('/:id', auth, deleteOne(Saving));
+//create task
 
-//create saving
 router.post('/:id', auth, async (req, res) => {
   try {
-    const saving = await Saving.create({ ...req.body, user: req.params.id });
+    const task = await Task.create({ ...req.body, assignTo: req.params.id });
+
     return res.status(201).json({
       status: 'success',
-      data: saving,
+      data: task,
     });
   } catch (error) {
     console.log(error);
@@ -35,5 +29,11 @@ router.post('/:id', auth, async (req, res) => {
     });
   }
 });
+
+router.get('/', auth, getAll(Task));
+router.get('/:id', auth, getOneById(Task));
+router.get('/users/:userId', auth, getAllByUser(Task));
+router.patch('/:id', auth, updateOne(Task));
+router.delete('/:id', auth, deleteOne(Task));
 
 module.exports = router;

@@ -32,14 +32,20 @@ const childSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  type : {
+  type: {
     type: String,
-    default: 'child'
+    default: 'child',
   },
-  profit : {
+  profit: {
     type: Number,
-    default: 0
-  }
+    default: 0,
+  },
+  tasks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Goal',
+    },
+  ],
 });
 
 childSchema.pre(/^find/, function (next) {
