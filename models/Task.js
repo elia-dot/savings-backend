@@ -10,7 +10,6 @@ const taskSchema = new mongoose.Schema({
   assignTo: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Child',
-    required: [true, 'task must be asign to a child'],
   },
   createdAt: {
     type: Date,
@@ -28,10 +27,10 @@ const taskSchema = new mongoose.Schema({
 
 taskSchema.post('save', async function () {
   const child = await Child.findById(this.assignTo);
-  if (child.tasks.find(this._id) === -1) {
+  if (!child.tasks.includes(this._id)) {
     child.tasks.push(this._id);
   }
-  await user.save();
+  await child.save();
 });
 
 module.exports = Task = mongoose.model('Task', taskSchema);
