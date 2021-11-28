@@ -43,7 +43,7 @@ const childSchema = new mongoose.Schema({
   tasks: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Goal',
+      ref: 'Task',
     },
   ],
 });
@@ -51,6 +51,8 @@ const childSchema = new mongoose.Schema({
 childSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'goals',
+  }).populate({
+    path: 'tasks',
   });
 
   next();
