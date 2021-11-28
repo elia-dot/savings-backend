@@ -53,7 +53,7 @@ childSchema.pre(/^find/, function (next) {
     path: 'goals',
   }).populate({
     path: 'tasks',
-    select: 'completed'
+    select: { 'completed': 1 },
   });
 
   next();
