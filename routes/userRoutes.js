@@ -103,6 +103,13 @@ router.post('/add-child', auth, async (req, res) => {
       error: 'Unauthorized',
     });
   const parentDoc = await Parent.findById(parent);
+  const isMatch = await bcrypt.compare(password, parentDoc.password);
+    if (isMatch) {
+      return res.status(400).json({
+        status: 'fail',
+        error: 'Child password must be different from the parent password',
+      });
+    }
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
