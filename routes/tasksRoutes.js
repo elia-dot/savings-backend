@@ -30,9 +30,24 @@ router.post('/:id', auth, async (req, res) => {
   }
 });
 
+router.get('/users/:userId', auth, async (req, res) => {
+  try {
+    const tasks = await Task.find({ assignTo: req.params.userId });
+    return res.status(201).json({
+      status: 'success',
+      data: tasks,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'fail',
+      error: 'Server Error',
+    });
+  }
+});
+
 router.get('/', auth, getAll(Task));
 router.get('/:id', auth, getOneById(Task));
-router.get('/users/:userId', auth, getAllByUser(Task));
 router.patch('/:id', auth, updateOne(Task));
 router.delete('/:id', auth, deleteOne(Task));
 
