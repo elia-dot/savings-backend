@@ -8,7 +8,6 @@ const {
   getOneById,
   updateOne,
   deleteOne,
-  createOne,
   getAll,
   getAllByUser,
 } = require('../utils/handlersFactory');
@@ -23,9 +22,11 @@ router.delete('/:id', auth, deleteOne(Saving));
 router.post('/:id', auth, async (req, res) => {
   try {
     const saving = await Saving.create({ ...req.body, user: req.params.id });
+    const user = await Child.findById(req.params.id);
     return res.status(201).json({
       status: 'success',
       data: saving,
+      totalSaving: user.saving,
     });
   } catch (error) {
     console.log(error);
