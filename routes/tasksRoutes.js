@@ -34,7 +34,9 @@ router.post('/:id', auth, async (req, res) => {
 
 router.get('/users/:userId', auth, async (req, res) => {
   try {
-    const tasks = await Task.find({ assignTo: req.params.userId });
+    const tasks = await Task.find({ assignTo: req.params.userId }).sort({
+      createdAt: -1,
+    });
     return res.status(201).json({
       status: 'success',
       data: tasks,
@@ -59,10 +61,6 @@ router.post('/:id/:taskId', auth, async (req, res) => {
       },
       { new: true }
     );
-    // return res.status(201).json({
-    //   status: 'success',
-    //   data: task,
-    // });
     createSaving(req, res);
   } catch (error) {
     console.log(error);
