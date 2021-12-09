@@ -54,13 +54,11 @@ router.get('/users/:userId', auth, async (req, res) => {
 
 router.post('/:id/:taskId', auth, async (req, res) => {
   try {
-    const task = await Task.findByIdAndUpdate(
-      req.params.taskId,
-      {
-        completed: true,
-      },
-      { new: true }
-    );
+    const task = await Task.findById(req.params.taskId);
+    task.completed === true
+      ? (task.completed = false)
+      : (task.completed = true);
+    await task.save();
     createSaving(req, res);
   } catch (error) {
     console.log(error);
