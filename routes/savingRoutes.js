@@ -10,6 +10,7 @@ const {
   deleteOne,
   getAll,
   getAllByUser,
+  createSaving,
 } = require('../utils/handlersFactory');
 
 router.get('/', auth, getAll(Saving));
@@ -19,22 +20,6 @@ router.patch('/:id', auth, updateOne(Saving));
 router.delete('/:id', auth, deleteOne(Saving));
 
 //create saving
-router.post('/:id', auth, async (req, res) => {
-  try {
-    const saving = await Saving.create({ ...req.body, user: req.params.id });
-    const user = await Child.findById(req.params.id);
-    return res.status(201).json({
-      status: 'success',
-      data: saving,
-      totalSaving: user.saving,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      status: 'fail',
-      error: 'Server Error',
-    });
-  }
-});
+router.post('/:id', auth, createSaving);
 
 module.exports = router;

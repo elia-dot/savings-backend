@@ -140,3 +140,21 @@ module.exports.deleteOne = (Model) => async (req, res) => {
     });
   }
 };
+
+module.exports.createSaving = async (req, res) => {
+  try {
+    const saving = await Saving.create({ ...req.body, user: req.params.id });
+    const user = await Child.findById(req.params.id);
+    return res.status(201).json({
+      status: 'success',
+      data: saving,
+      totalSaving: user.saving,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'fail',
+      error: 'Server Error',
+    });
+  }
+};

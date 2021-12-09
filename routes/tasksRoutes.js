@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
+
 const Task = require('../models/Task');
 const { auth } = require('../utils/auth');
-
 const {
   getOneById,
   updateOne,
   deleteOne,
   getAll,
-  getAllByUser,
+  createSaving,
 } = require('../utils/handlersFactory');
 
 //create task
@@ -30,6 +30,8 @@ router.post('/:id', auth, async (req, res) => {
   }
 });
 
+//get all child's tasks
+
 router.get('/users/:userId', auth, async (req, res) => {
   try {
     const tasks = await Task.find({ assignTo: req.params.userId });
@@ -37,6 +39,31 @@ router.get('/users/:userId', auth, async (req, res) => {
       status: 'success',
       data: tasks,
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'fail',
+      error: 'Server Error',
+    });
+  }
+});
+
+//mark task as complete
+
+router.post('/:id/:taskId', auth, async (req, res) => {
+  try {
+    const task = await Task.findByIdAndUpdate(
+      req.params.taskId,
+      {
+        completed: true,
+      },
+      { new: true }
+    );
+    // return res.status(201).json({
+    //   status: 'success',
+    //   data: task,
+    // });
+    createSaving(req, res);
   } catch (error) {
     console.log(error);
     return res.status(500).json({
