@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const parentSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Please enter a name'],
-  },
   email: {
     type: String,
     required: [true, 'Please enter a valid email'],
