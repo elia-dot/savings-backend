@@ -16,7 +16,7 @@ const Child = require('../models/Child');
 
 router.post('/signup', async (req, res) => {
   try {
-    const {email, password } = req.body;
+    const { email, password } = req.body;
 
     const salt = await bcrypt.genSalt(10);
 
@@ -136,6 +136,33 @@ router.post('/add-child', auth, async (req, res) => {
         status: 'fail',
         error: 'this username already exsits',
       });
+    return res.status(500).json({
+      status: 'fail',
+      error: 'Server Error',
+    });
+  }
+});
+
+//update child password
+router.post('/update-password/child/:id', auth, async (req, res) => {
+  try {
+    const child = await Child.findById(req.params.id);
+    if (!child) {
+      return res.status(404).json({
+        status: 'fail',
+        error: `doc not exist`,
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    child.password = hashedPassword;
+    await child.save();
+    res.status(200).json({
+      status: 'success',
+    });
+  } catch (error) {
+    console.log(error);
     return res.status(500).json({
       status: 'fail',
       error: 'Server Error',
