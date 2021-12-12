@@ -31,6 +31,10 @@ const parentSchema = new mongoose.Schema({
     type: String,
     default: 'parent',
   },
+  resetToken : {
+    type : String,
+    expires: 3600
+  }
 });
 
 parentSchema.pre(/^find/, function (next) {

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const Parent = require('../models/Parent');
 const { createSendToken } = require('../utils/token');
@@ -11,6 +13,7 @@ const {
   deleteOne,
 } = require('../utils/handlersFactory');
 const Child = require('../models/Child');
+const Token = require('../models/Token');
 
 //signup
 
@@ -158,6 +161,100 @@ router.post('/update-password/child/:id', auth, async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
     child.password = hashedPassword;
     await child.save();
+    res.status(200).json({
+      status: 'success',
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'fail',
+      error: 'Server Error',
+    });
+  }
+});
+
+//create reset password token
+
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const user = await Parent.findOne({ email: req.body.email });
+    let token = await Token.findOne({ user: user._id });
+    if (token) await token.deleteOne();
+    const newToken = Math.floor(100000 + Math.random() * 900000);
+    token = await Token.create({ token: newToken, user: user._id });
+
+    const msg = {
+      to: user.email,
+      from: process.env.SENDGRID_EMAIL,
+      subject: 'password verification code',
+      text: newToken.toString(),
+      html: `<p>הקוד שלך לשחזור הסיסמא הוא:</p><strong>${newToken.toString()}</strong><p>אם לא ביקשת לשחזר את הסיסמא, התעלם מהודעה זו</p>`,
+    };
+
+    sgMail
+      .send(msg)
+      .then((response) => {
+        console.log(response[0].statusCode);
+        console.log(response[0].headers);
+      })
+      .catch((error) => {
+        console.error(error.response.body);
+      });
+
+    res.status(201).json({
+      status: 'success',
+      data: token,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'fail',
+      error: 'Server Error',
+    });
+  }
+});
+
+//verify token
+
+router.post('/reset-password', async (req, res) => {
+  try {
+    const token = await Token.findOne({ token: req.body.token });
+    if (!token) {
+      return res.status(404).json({
+        status: 'fail',
+        error: 'Token not found',
+      });
+    }
+    const user = await Parent.findById(token.user);
+    return res.status(200).json({
+      status: 'success',
+      data: user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'fail',
+      error: 'Server Error',
+    });
+  }
+});
+
+//reset password
+
+router.post('/update-password/parent/:id', auth, async (req, res) => {
+  try {
+    const parent = await Parent.findById(req.params.id);
+    if (!parent) {
+      return res.status(404).json({
+        status: 'fail',
+        error: `user not exist`,
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    parent.password = hashedPassword;
+    await parent.save();
     res.status(200).json({
       status: 'success',
     });
