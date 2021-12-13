@@ -257,6 +257,7 @@ router.post('/update-password/parent/:id', auth, async (req, res) => {
     await parent.save();
     res.status(200).json({
       status: 'success',
+      data: parent
     });
   } catch (error) {
     console.log(error);
