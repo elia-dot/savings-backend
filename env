@@ -1,0 +1,6 @@
+MONGO_URI=mongodb+srv://elia:refael052@cluster0.ba96n.mongodb.net/goals?retryWrites=true&w=majority
+JWT_SECRET=very_long_and_scure_secret_key
+JWT_EXPIRES_IN=90
+
+SENDGRID_API_KEY=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
+SENDGRID_EMAIL=savingoals@savingoals.com
