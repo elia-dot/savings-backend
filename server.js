@@ -54,18 +54,21 @@ app.use('/tasks', tasksRouter);
 //   })();
 // };
 
-const saveToken = (token) => {
+const saveToken = async (token) => {
   console.log(token);
   const exists = PushToken.findOne({ token });
   if (!exists) {
-    PushToken.create({ token });
+    await PushToken.create({ token });
+    res.status(201).json({
+      status: 'success',
+      data: token,
+    });
   }
 };
 
 app.post('/token', (req, res) => {
   saveToken(req.body.token.value);
-  console.log(`Received push token, ${req.body.token.value}`);
-  res.send(`Received push token, ${req.body.token.value}`);
+  console.log(`Received push token, ${req.body.token.data}`);
 });
 
 // app.post('/message', (req, res) => {
