@@ -101,7 +101,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/add-child', auth, async (req, res) => {
   const parent = req.user._id;
-  const { username, name, password, revenue, pushToken } = req.body;
+  const { username, name, password, revenue } = req.body;
   if (req.user.type !== 'parent')
     return res.status(400).json({
       status: 'fail',
@@ -124,7 +124,6 @@ router.post('/add-child', auth, async (req, res) => {
       password: hashedPassword,
       revenue,
       parent,
-      pushToken,
     });
 
     const updatedChildren = { children: [...parentDoc.children, newChild._id] };
