@@ -56,7 +56,7 @@ app.use('/tasks', tasksRouter);
 
 const saveToken = async (token, req, res) => {
   console.log(token);
-  const exists = PushToken.findOne({ token: token.data });
+  const exists = await PushToken.findOne({ token: token.data });
   console.log(exists);
   if (!exists) {
     await PushToken.create({ token: token.data });
