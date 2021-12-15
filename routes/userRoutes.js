@@ -183,6 +183,9 @@ router.post('/forgot-password', async (req, res) => {
     const newToken = Math.floor(100000 + Math.random() * 900000);
     token = await Token.create({ token: newToken, user: user._id });
 
+    console.log(user.email);
+    console.log(process.env.SENDGRID_EMAIL);
+
     const msg = {
       to: user.email,
       from: process.env.SENDGRID_EMAIL,
@@ -257,7 +260,7 @@ router.post('/update-password/parent/:id', auth, async (req, res) => {
     await parent.save();
     res.status(200).json({
       status: 'success',
-      data: parent
+      data: parent,
     });
   } catch (error) {
     console.log(error);
