@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const { Expo } = require('expo-server-sdk');
 const cors = require('cors');
 const app = express();
 
@@ -11,8 +10,7 @@ const goalRouter = require('./routes/goalRoutes');
 const savingRouter = require('./routes/savingRoutes');
 const tasksRouter = require('./routes/tasksRoutes');
 const PushToken = require('./models/PushToken');
-const Parent = require('./models/Parent');
-const Child = require('./models/Child');
+const { handlePushTokens } = require('./utils/sentNotification');
 
 app.use(express.json());
 app.use(cors());
@@ -24,52 +22,6 @@ app.use('/users', userRouter);
 app.use('/goals', goalRouter);
 app.use('/savings', savingRouter);
 app.use('/tasks', tasksRouter);
-
-let expo = new Expo();
-
-const handlePushTokens = async (push, req, res) => {
-  const { title, body, to } = push;
-  let notifications = [];
-
-  let user;
-
-  user = await Parent.findById(to);
-  if (!user) user = await Child.findById(to);
-
-  const pushToken = user.pushToken;
-
-  if (!Expo.isExpoPushToken(pushToken)) {
-    console.error(`Push token ${pushToken} is not a valid Expo push token`);
-    return res.status(404).json({
-      status: 'fail',
-      error: `Push token ${pushToken} is not a valid Expo push token`,
-    });
-  }
-
-  notifications.push({
-    to: pushToken,
-    sound: 'default',
-    title: title,
-    body: body,
-    data: { body },
-  });
-
-  let chunks = expo.chunkPushNotifications(notifications);
-  let tickets = [];
-  (async () => {
-    for (let chunk of chunks) {
-      try {
-        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-        console.log(ticketChunk);
-        tickets.push(...ticketChunk);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  })();
-
-  return res.status(200).json({ status: 'success' });
-};
 
 const saveToken = async (token, req, res) => {
   const exists = await PushToken.findOne({ token: token.data });
@@ -90,6 +42,7 @@ app.post('/token', (req, res) => {
 app.post('/message', (req, res) => {
   handlePushTokens(req.body, req, res);
   console.log(`Received message, with title: ${req.body.title}`);
+  console.log(req.body);
 });
 
 const PORT = process.env.PORT || 3000;

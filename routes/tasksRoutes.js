@@ -10,6 +10,7 @@ const {
   getAll,
   createSaving,
 } = require('../utils/handlersFactory');
+const { handlePushTokens } = require('../utils/sentNotification');
 
 //create task
 
@@ -60,6 +61,20 @@ router.post('/:id/:taskId', auth, async (req, res) => {
       : (task.completed = true);
     await task.save();
     createSaving(req, res);
+    try {
+      const body = {
+        to: '61962131e7eef60779e256e5',
+        title: `קיבלת ${task.price} ש"ח!`,
+        body: `הורה אישר את השלמת המשימה: ${task.title}. הסכום עודכן בחשבונך `,
+      };
+      const res = await handlePushTokens(body);
+      return res.status(200).json({
+        status: 'success',
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ status: 'fail', error });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json({
