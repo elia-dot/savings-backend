@@ -1,7 +1,7 @@
 const { Expo } = require('expo-server-sdk');
 
-const Parent = require('./models/Parent');
-const Child = require('./models/Child');
+const Parent = require('../models/Parent');
+const Child = require('../models/Child');
 
 let expo = new Expo();
 
