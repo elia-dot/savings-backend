@@ -63,7 +63,7 @@ router.post('/:id/:taskId', auth, async (req, res) => {
     createSaving(req, res);
 
     const body = {
-      to: '61962131e7eef60779e256e5',
+      to: req.params.id,
       title: `קיבלת ${task.price} ש"ח!`,
       body: `הורה אישר את השלמת המשימה: ${task.title}. הסכום עודכן בחשבונך `,
     };
