@@ -19,7 +19,7 @@ const Token = require('../models/Token');
 
 router.post('/signup', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, pushToken } = req.body;
 
     const salt = await bcrypt.genSalt(10);
 
@@ -27,6 +27,7 @@ router.post('/signup', async (req, res) => {
     const newUser = await Parent.create({
       email,
       password: hashedPassword,
+      pushToken,
     });
     createSendToken(newUser, req, res);
   } catch (error) {
@@ -56,7 +57,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const { email, username, password, pushToken } = req.body;
     let user;
 
     if (email) {
@@ -84,6 +85,8 @@ router.post('/login', async (req, res) => {
         error: 'Invalid email or password!',
       });
     }
+    user.pushToken = pushToken;
+    await user.save();
     createSendToken(user, req, res);
   } catch (error) {
     console.log(error);
@@ -98,7 +101,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/add-child', auth, async (req, res) => {
   const parent = req.user._id;
-  const { username, name, password, revenue } = req.body;
+  const { username, name, password, revenue, pushToken } = req.body;
   if (req.user.type !== 'parent')
     return res.status(400).json({
       status: 'fail',
@@ -121,6 +124,7 @@ router.post('/add-child', auth, async (req, res) => {
       password: hashedPassword,
       revenue,
       parent,
+      pushToken,
     });
 
     const updatedChildren = { children: [...parentDoc.children, newChild._id] };
