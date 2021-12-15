@@ -83,8 +83,8 @@ const saveToken = async (token, req, res) => {
 };
 
 app.post('/token', (req, res) => {
-  saveToken(req.body.token.value, req, res);
-  console.log(`Received push token, ${req.body.token.value.data}`);
+  saveToken(req.body.token, req, res);
+  console.log(`Received push token, ${req.body.token}`);
 });
 
 app.post('/message', (req, res) => {
