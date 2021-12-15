@@ -10,6 +10,7 @@ const userRouter = require('./routes/userRoutes');
 const goalRouter = require('./routes/goalRoutes');
 const savingRouter = require('./routes/savingRoutes');
 const tasksRouter = require('./routes/tasksRoutes');
+const PushToken = require('./models/PushToken');
 
 app.use(express.json());
 app.use(cors());
@@ -54,10 +55,10 @@ app.use('/tasks', tasksRouter);
 // };
 
 const saveToken = (token) => {
-  console.log(token, savedPushTokens);
-  const exists = savedPushTokens.find((t) => t === token);
+  console.log(token);
+  const exists = PushToken.findOne({ token });
   if (!exists) {
-    savedPushTokens.push(token);
+    PushToken.create({ token });
   }
 };
 
