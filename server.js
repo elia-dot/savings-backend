@@ -23,7 +23,8 @@ app.use('/goals', goalRouter);
 app.use('/savings', savingRouter);
 app.use('/tasks', tasksRouter);
 
-// const handlePushTokens = ({ title, body }) => {
+// const handlePushTokens = (push, req, res) => {
+//   const { title, body } = push;
 //   let notifications = [];
 //   for (let pushToken of savedPushTokens) {
 //     if (!Expo.isExpoPushToken(pushToken)) {
@@ -54,18 +55,16 @@ app.use('/tasks', tasksRouter);
 //   })();
 // };
 
-const saveToken = async (token, req, res) => {
-  console.log(token);
-  const exists = await PushToken.findOne({ token: token.data });
-  console.log(exists);
-  if (!exists) {
-    await PushToken.create({ token: token.data });
-    res.status(201).json({
-      status: 'success',
-      data: token,
-    });
-  }
-};
+// const saveToken = async (token, req, res) => {
+//   const exists = await PushToken.findOne({ token: token.data });
+//   if (!exists) {
+//     await PushToken.create({ token: token.data });
+//     res.status(201).json({
+//       status: 'success',
+//       data: token,
+//     });
+//   }
+// };
 
 app.post('/token', (req, res) => {
   saveToken(req.body.token.value, req, res);
@@ -73,9 +72,8 @@ app.post('/token', (req, res) => {
 });
 
 // app.post('/message', (req, res) => {
-//   handlePushTokens(req.body);
+//   handlePushTokens(req.body, req, res);
 //   console.log(`Received message, with title: ${req.body.title}`);
-//   res.send(`Received message, with title: ${req.body.title}`);
 // });
 
 const PORT = process.env.PORT || 3000;

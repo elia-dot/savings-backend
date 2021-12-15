@@ -46,6 +46,9 @@ const childSchema = new mongoose.Schema({
       ref: 'Task',
     },
   ],
+  pushToken: {
+    type: String,
+  },
 });
 
 childSchema.pre(/^find/, function (next) {
@@ -53,7 +56,7 @@ childSchema.pre(/^find/, function (next) {
     path: 'goals',
   }).populate({
     path: 'tasks',
-    select: { 'completed': 1 },
+    select: { completed: 1 },
   });
 
   next();

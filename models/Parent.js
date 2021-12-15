@@ -34,6 +34,9 @@ const parentSchema = new mongoose.Schema({
   resetToken : {
     type : String,
     expires: 3600
+  },
+  pushToken : {
+    type: String
   }
 });
 
