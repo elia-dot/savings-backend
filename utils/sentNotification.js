@@ -24,25 +24,31 @@ module.exports.handlePushTokens = async (push, req, res) => {
     });
   }
 
-  notifications.push({
-    to: pushToken,
-    sound: 'default',
-    title: title,
-    body: body,
-    data: { body },
-  });
-
-  let chunks = expo.chunkPushNotifications(notifications);
-  let tickets = [];
-  (async () => {
-    for (let chunk of chunks) {
-      try {
-        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-        console.log(ticketChunk);
-        tickets.push(...ticketChunk);
-      } catch (error) {
-        console.error(error);
+  try {
+    notifications.push({
+      to: pushToken,
+      sound: 'default',
+      title: title,
+      body: body,
+      data: { body },
+    });
+  
+    let chunks = expo.chunkPushNotifications(notifications);
+    let tickets = [];
+    (async () => {
+      for (let chunk of chunks) {
+        try {
+          let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+          console.log(ticketChunk);
+          tickets.push(...ticketChunk);
+        } catch (error) {
+          console.error(error);
+        }
       }
-    }
-  })();
+    })();
+  } catch (error) {
+    console.log("error: ", error);
+  }
+
+  
 };
