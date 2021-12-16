@@ -149,12 +149,14 @@ module.exports.createSaving = async (req, res) => {
   try {
     const saving = await Saving.create({ ...req.body, user: req.params.id });
     const user = await Child.findById(req.params.id);
-    const body = {
-      to: req.params.id,
-      title: `קיבלת ${saving.amount} ש"ח!`,
-      body: `הסכום הופקד לחשבונך בעבור: ${saving.description}`,
-    };
-    await handlePushTokens(body, req, res);
+    if (user.pushToken) {
+      const body = {
+        to: req.params.id,
+        title: `קיבלת ${saving.amount} ש"ח!`,
+        body: `הסכום הופקד לחשבונך בעבור: ${saving.description}`,
+      };
+      await handlePushTokens(body, req, res);
+    }
     return res.status(201).json({
       status: 'success',
       data: saving,

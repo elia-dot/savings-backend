@@ -14,8 +14,6 @@ module.exports.handlePushTokens = async (push, req, res) => {
   user = await Parent.findById(to);
   if (!user) user = await Child.findById(to);
 
-  console.log(user);
-
   const pushToken = user.pushToken;
 
   if (!Expo.isExpoPushToken(pushToken)) {
