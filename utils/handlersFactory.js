@@ -152,7 +152,7 @@ module.exports.createSaving = async (req, res) => {
     const body = {
       to: req.params.id,
       title: `קיבלת ${saving.amount} ש"ח!`,
-      body: `הסכום הופקד לחשבונךת בעבור: ${saving.description}`,
+      body: `הסכום הופקד לחשבונך בעבור: ${saving.description}`,
     };
     await handlePushTokens(body, req, res);
     return res.status(201).json({
