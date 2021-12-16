@@ -150,7 +150,7 @@ module.exports.createSaving = async (req, res) => {
     const saving = await Saving.create({ ...req.body, user: req.params.id });
     const user = await Child.findById(req.params.id);
     const body = {
-      to: '61962131e7eef60779e256e5',
+      to: req.params.id,
       title: `קיבלת ${saving.amount} ש"ח!`,
       body: `הסכום הופקד לחשבונךת בעבור: ${saving.description}`,
     };
