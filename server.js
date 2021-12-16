@@ -40,9 +40,8 @@ app.post('/token', (req, res) => {
 });
 
 app.post('/message', (req, res) => {
-  handlePushTokens(req.body, req, res);
-  console.log(`Received message, with title: ${req.body.title}`);
-  console.log(req.body);
+  handlePushTokens(req.body.message, req, res);
+  console.log(`Received message, with title: ${req.body.message.title}`);
 });
 
 const PORT = process.env.PORT || 3000;
