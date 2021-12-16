@@ -192,9 +192,10 @@ router.post('/forgot-password', async (req, res) => {
     if (!user) {
       return res.status(404).json({
         ststus: 'fail',
-        error: 'User not found'
-      })
+        error: 'User not found',
+      });
     }
+
     let token = await Token.findOne({ user: user._id });
     if (token) await token.deleteOne();
     const newToken = Math.floor(100000 + Math.random() * 900000);
@@ -202,21 +203,23 @@ router.post('/forgot-password', async (req, res) => {
 
     const message = {
       from: 'savingoals@savingoals.com',
-      to: user._id,
+      to: user.email,
       subject: 'password verification code',
       text: `הקוד שלך לשחזור הסיסמא הוא: ${newToken.toString()}`,
     };
     transport.sendMail(message, function (err, info) {
       if (err) {
         console.log(err);
+        return res.status(500).json({
+          ststus: 'fail',
+          error: err,
+        });
       } else {
-        console.log(info);
+        return res.status(201).json({
+          status: 'success',
+          data: token,
+        });
       }
-    });
-
-    res.status(201).json({
-      status: 'success',
-      data: token,
     });
   } catch (error) {
     console.log(error);
