@@ -62,12 +62,12 @@ router.post('/:id/:taskId', auth, async (req, res) => {
     await task.save();
     createSaving(req, res);
 
-    const body = {
-      to: req.params.id,
-      title: `קיבלת ${task.price} ש"ח!`,
-      body: `הורה אישר את השלמת המשימה: ${task.title}. הסכום עודכן בחשבונך `,
-    };
-    await handlePushTokens(body, req, res);
+    // const body = {
+    //   to: req.params.id,
+    //   title: `קיבלת ${task.price} ש"ח!`,
+    //   body: `הורה אישר את השלמת המשימה: ${task.title}. הסכום עודכן בחשבונך `,
+    // };
+    // await handlePushTokens(body, req, res);
   } catch (error) {
     console.log(error);
     return res.status(500).json({

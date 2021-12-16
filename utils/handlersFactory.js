@@ -1,3 +1,7 @@
+const Saving = require('../models/Saving');
+const Child = require('../models/Child');
+const { handlePushTokens } = require('./sentNotification');
+
 module.exports.createOne = (Model) => async (req, res) => {
   try {
     const doc = await Model.create({ ...req.body, user: req.user._id });
@@ -145,6 +149,12 @@ module.exports.createSaving = async (req, res) => {
   try {
     const saving = await Saving.create({ ...req.body, user: req.params.id });
     const user = await Child.findById(req.params.id);
+    const body = {
+      to: '61962131e7eef60779e256e5',
+      title: `קיבלת ${saving.amount} ש"ח!`,
+      body: `הסכום הופקד לחשבונךת בעבור: ${saving.description}`,
+    };
+    await handlePushTokens(body, req, res);
     return res.status(201).json({
       status: 'success',
       data: saving,
