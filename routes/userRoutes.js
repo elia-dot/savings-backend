@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const nodemailer = require('nodemailer');
 
 const Parent = require('../models/Parent');
 const { createSendToken } = require('../utils/token');
@@ -14,6 +13,15 @@ const {
 } = require('../utils/handlersFactory');
 const Child = require('../models/Child');
 const Token = require('../models/Token');
+
+const transport = nodemailer.createTransport({
+  host: 'mail.privateemail.com',
+  port: 465,
+  auth: {
+    user: 'savingoals@savingoals.com',
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
 //signup
 
@@ -181,31 +189,30 @@ router.post('/update-password/child/:id', auth, async (req, res) => {
 router.post('/forgot-password', async (req, res) => {
   try {
     const user = await Parent.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(404).json({
+        ststus: 'fail',
+        error: 'User not found'
+      })
+    }
     let token = await Token.findOne({ user: user._id });
     if (token) await token.deleteOne();
     const newToken = Math.floor(100000 + Math.random() * 900000);
     token = await Token.create({ token: newToken, user: user._id });
 
-    console.log(user.email);
-    console.log(process.env.SENDGRID_EMAIL);
-
-    const msg = {
-      to: user.email,
-      from: process.env.SENDGRID_EMAIL,
+    const message = {
+      from: 'savingoals@savingoals.com',
+      to: user._id,
       subject: 'password verification code',
-      text: newToken.toString(),
-      html: `<p>הקוד שלך לשחזור הסיסמא הוא:</p><strong>${newToken.toString()}</strong><p>אם לא ביקשת לשחזר את הסיסמא, התעלם מהודעה זו</p>`,
+      text: `הקוד שלך לשחזור הסיסמא הוא: ${newToken.toString()}`,
     };
-
-    sgMail
-      .send(msg)
-      .then((response) => {
-        console.log(response[0].statusCode);
-        console.log(response[0].headers);
-      })
-      .catch((error) => {
-        console.error(error.response.body);
-      });
+    transport.sendMail(message, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(info);
+      }
+    });
 
     res.status(201).json({
       status: 'success',
