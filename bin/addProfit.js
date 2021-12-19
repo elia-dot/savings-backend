@@ -1,3 +1,4 @@
+#! /app/.heroku/node/bin/node
 const Child = require('./models/Child');
 const Saving = require('./models/Saving');
 
