@@ -1,3 +1,4 @@
+#! /app/.heroku/node/bin/node
 const Child = require('./models/Child');
 const Saving = require('./models/Saving');
 
@@ -35,3 +36,4 @@ if (date.getDate() === 19) {
 } else {
   console.log('Not today');
 }
+
