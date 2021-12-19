@@ -8,6 +8,7 @@ const date = new Date();
 
 const addProfit = async () => {
   const childs = await Child.find({ revenue: { $gt: 0 } });
+  console.log(childs);
   childs.forEach((child) => {
     const total = child.saving + child.profit;
     const profit = total * (child.revenue / 100);
