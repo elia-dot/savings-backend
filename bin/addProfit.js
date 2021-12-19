@@ -5,10 +5,10 @@ const Saving = require('../models/Saving');
 const { handlePushTokens } = require('../utils/sentNotification');
 
 const date = new Date();
-
+console.log(date.getDate());
 const addProfit = async () => {
   const childs = await Child.find({ revenue: { $gt: 0 } });
-  console.log(date);
+  
   childs.forEach((child) => {
     const total = child.saving + child.profit;
     const profit = total * (child.revenue / 100);
