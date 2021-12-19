@@ -12,6 +12,7 @@ const tasksRouter = require('./routes/tasksRoutes');
 const PushToken = require('./models/PushToken');
 const { handlePushTokens } = require('./utils/sentNotification');
 
+
 app.use(express.json());
 app.use(cors());
 app.options('*', cors());
@@ -49,3 +50,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${3000}`);
 });
+
+
