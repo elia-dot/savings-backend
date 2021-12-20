@@ -5,6 +5,7 @@ const Saving = require('./models/Saving');
 const { handlePushTokens } = require('./utils/sentNotification');
 
 const date = new Date();
+console.log(date);
 
 const addProfit = async () => {
   const childs = await Child.find({ revenue: { $gt: 0 } });
