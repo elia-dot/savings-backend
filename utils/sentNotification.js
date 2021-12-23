@@ -42,6 +42,7 @@ module.exports.handlePushTokens = async (push, req, res) => {
         tickets.push(...ticketChunk);
       } catch (error) {
         console.error(error);
+        return res.status(500).json({ status: 'fail', error: 'error' });
       }
     }
   })();
