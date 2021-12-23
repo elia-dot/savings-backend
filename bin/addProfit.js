@@ -1,14 +1,13 @@
 #! /app/.heroku/node/bin/node
-const Child = require('./models/Child');
-const Saving = require('./models/Saving');
+const Child = require('../models/Child');
+const Saving = require('../models/Saving');
 
-const { handlePushTokens } = require('./utils/sentNotification');
+const { handlePushTokens } = require('../utils/sentNotification');
 
-const date = new Date();
-console.log(date);
 
 const addProfit = async () => {
   const childs = await Child.find({ revenue: { $gt: 0 } });
+  
   childs.forEach((child) => {
     const total = child.saving + child.profit;
     const profit = total * (child.revenue / 100);
