@@ -3,11 +3,11 @@ const Child = require('../models/Child');
 const Saving = require('../models/Saving');
 
 const { handlePushTokens } = require('../utils/sentNotification');
-
+const date = new Date();
 
 const addProfit = async () => {
   const childs = await Child.find({ revenue: { $gt: 0 } });
-  
+  console.log(childs);
   childs.forEach((child) => {
     const total = child.saving + child.profit;
     const profit = total * (child.revenue / 100);
@@ -27,13 +27,12 @@ const addProfit = async () => {
       title: `קיבלת ${profit} ש"ח!`,
       body: `הסכום הופקד לחשבונך בעבור: ריבית חודשית`,
     };
-    handlePushTokens(body)
+    handlePushTokens(body);
   });
 };
 
-if (date.getDate() === 19) {
+if (date.getDate() === 23) {
   addProfit();
 } else {
   console.log('Not today');
 }
-
