@@ -17,7 +17,12 @@ const { handlePushTokens } = require('../utils/sentNotification');
 router.post('/:id', auth, async (req, res) => {
   try {
     const task = await Task.create({ ...req.body, assignTo: req.params.id });
-
+    const body = {
+      to: req.params.id,
+      title: `משימה ידשה!`,
+      body: `הורה יצר משימה חדשה עבורך: ${task.title}`,
+    };
+    await handlePushTokens(body, req, res);
     return res.status(201).json({
       status: 'success',
       data: task,
