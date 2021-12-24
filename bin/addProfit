@@ -6,8 +6,11 @@ const date = new Date();
 if (date.getDate() === 24) {
   try {
     console.log('addindg profit');
-    const childs = await Child.find({ revenue: { $gt: 0 } });
-
+    let childs;
+    const getChilds = async () => {
+      childs = await Child.find({ revenue: { $gt: 0 } });
+    };
+    getChilds();
     childs.forEach((child) => {
       const total = child.saving + child.profit;
       const profit = total * (child.revenue / 100);
