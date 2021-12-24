@@ -78,4 +78,5 @@ module.exports.handlePushTokens = async (push, req, res) => {
       }
     }
   })();
+  return res.status(200).json({ status: 'success' });
 };
