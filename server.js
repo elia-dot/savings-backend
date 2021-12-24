@@ -50,7 +50,8 @@ app.post('/message/reminder', (req, res) => {
 });
 
 app.post('/message/task-completed', (req, res) => {
-  handlePushTokens(req.body.body, req, res);
+  handlePushTokens(req.body, req, res);
+  console.log(req.body);
   console.log(`Received message, with title: ${req.body.message.title}`);
 });
 
@@ -59,5 +60,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${3000}`);
 });
-
-
