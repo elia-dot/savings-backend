@@ -1,11 +1,12 @@
-const Child = require('./models/Child');
-const Saving = require('./models/Saving');
 const date = new Date();
 
 const addProfit = async () => {
+  const Child = require('./models/Child');
+  const Saving = require('./models/Saving');
   try {
     console.log('addindg profit');
-    const childs = await Child.find({ revenue: { $gt: 0 } });
+    const childs = await Child.find();
+    console.log('childs');
     childs.forEach((child) => {
       const total = child.saving + child.profit;
       const profit = total * (child.revenue / 100);
