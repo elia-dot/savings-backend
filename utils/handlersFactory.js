@@ -157,11 +157,7 @@ module.exports.createSaving = async (req, res) => {
       };
       await handlePushTokens(body, req, res);
     }
-    return res.status(201).json({
-      status: 'success',
-      data: saving,
-      totalSaving: user.saving,
-    });
+   
   } catch (error) {
     console.log(error);
     return res.status(500).json({

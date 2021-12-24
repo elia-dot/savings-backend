@@ -78,5 +78,9 @@ module.exports.handlePushTokens = async (push, req, res) => {
       }
     }
   })();
-  return res.status(200).json({ status: 'success' });
+  return res.status(201).json({
+    status: 'success',
+    data: saving,
+    totalSaving: user.saving,
+  });
 };
