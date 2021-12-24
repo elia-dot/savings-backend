@@ -5,7 +5,7 @@ const Child = require('../models/Child');
 
 let expo = new Expo();
 
-module.exports.handlePushTokens = async (push, req, res) => {
+module.exports.handlePushTokens = async (push, req, res, saving = false) => {
   const { title, body, to } = push;
   let notifications = [];
 
@@ -78,9 +78,5 @@ module.exports.handlePushTokens = async (push, req, res) => {
       }
     }
   })();
-  return res.status(201).json({
-    status: 'success',
-    data: saving,
-    totalSaving: user.saving,
-  });
+  if (!saving) return res.status(200).json({ status: 'success' });
 };
