@@ -5,23 +5,23 @@ const addProfit = async () => {
   const Saving = require('./models/Saving');
   try {
     console.log('addindg profit');
-    const childs = await Child.find();
+    // const childs = await Child.find();
     console.log('childs');
-    childs.forEach((child) => {
-      const total = child.saving + child.profit;
-      const profit = total * (child.revenue / 100);
-      child.profit += profit;
-      child.save();
+    // childs.forEach((child) => {
+    //   const total = child.saving + child.profit;
+    //   const profit = total * (child.revenue / 100);
+    //   child.profit += profit;
+    //   child.save();
 
-      const createSaving = async () => {
-        await Saving.create({
-          user: child._id,
-          amount: profit,
-          description: 'monthly profit',
-        });
-      };
-      createSaving();
-    });
+    //   const createSaving = async () => {
+    //     await Saving.create({
+    //       user: child._id,
+    //       amount: profit,
+    //       description: 'monthly profit',
+    //     });
+    //   };
+    //   createSaving();
+    // });
     console.log('profit added');
   } catch (error) {
     console.log(error);
