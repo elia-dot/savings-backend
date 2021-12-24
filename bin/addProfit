@@ -34,4 +34,3 @@ if (date.getDate() === 24) {
 } else {
   console.log('Not today');
 }
-process.exit();
