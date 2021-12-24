@@ -22,7 +22,7 @@ router.post('/:id', auth, async (req, res) => {
       title: `משימה ידשה!`,
       body: `הורה יצר משימה חדשה עבורך: ${task.title}`,
     };
-    await handlePushTokens(body, req, res);
+    await handlePushTokens(body, req, res, (savingCreated = true));
     return res.status(201).json({
       status: 'success',
       data: task,
