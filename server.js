@@ -45,14 +45,15 @@ app.post('/message', (req, res) => {
 });
 
 app.post('/message/reminder', (req, res) => {
-  handlePushTokens(req.body.body, req, res);
-  console.log(`Received message, with title: ${req.body.message.title}`);
+  handlePushTokens(req.body, req, res);
+  console.log(req.body);
+  console.log(`Received message, with title: ${req.body.title}`);
 });
 
 app.post('/message/task-completed', (req, res) => {
   handlePushTokens(req.body, req, res);
   console.log(req.body);
-  console.log(`Received message, with title: ${req.body.message.title}`);
+  console.log(`Received message, with title: ${req.body.title}`);
 });
 
 const PORT = process.env.PORT || 3000;
