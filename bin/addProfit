@@ -3,7 +3,7 @@ const Child = require('../models/Child');
 const Saving = require('../models/Saving');
 const date = new Date();
 
-const addProfit = async () => {
+if (date.getDate() === 24) {
   try {
     console.log('addindg profit');
     const childs = await Child.find({ revenue: { $gt: 0 } });
@@ -27,10 +27,6 @@ const addProfit = async () => {
   } catch (error) {
     console.log(error);
   }
-};
-
-if (date.getDate() === 24) {
-  addProfit();
 } else {
   console.log('Not today');
 }
