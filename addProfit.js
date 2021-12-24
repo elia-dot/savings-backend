@@ -5,7 +5,6 @@ const date = new Date();
 const addProfit = async () => {
   try {
     const childs = await Child.find({ revenue: { $gt: 0 } });
-    console.log(childs);
     childs.forEach((child) => {
       const total = child.saving + child.profit;
       const profit = total * (child.revenue / 100);
@@ -21,6 +20,7 @@ const addProfit = async () => {
       };
       createSaving();
     });
+    console.log('profit added');
   } catch (error) {
     console.log(error);
   }
