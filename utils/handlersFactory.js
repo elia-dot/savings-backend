@@ -152,8 +152,8 @@ module.exports.createSaving = async (req, res) => {
     if (user.pushToken && saving.amount > 0) {
       const body = {
         to: req.params.id,
-        title: `קיבלת ${saving.amount} ש"ח!`,
-        body: `הסכום הופקד לחשבונך בעבור: ${saving.description}`,
+        title: `You've Received ${saving.amount}NIS`,
+        body: ` The money added to your balance for: ${saving.description}`,
       };
       await handlePushTokens(body, req, res, savingCreated = true);
     }

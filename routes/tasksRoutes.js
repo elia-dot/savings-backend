@@ -19,8 +19,8 @@ router.post('/:id', auth, async (req, res) => {
     const task = await Task.create({ ...req.body, assignTo: req.params.id });
     const body = {
       to: req.params.id,
-      title: `משימה ידשה!`,
-      body: `הורה יצר משימה חדשה עבורך: ${task.title}`,
+      title: `New Task!`,
+      body: `Parent added new task for you: ${task.title}`,
     };
     await handlePushTokens(body, req, res, (savingCreated = true));
     return res.status(201).json({
