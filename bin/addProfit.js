@@ -22,16 +22,10 @@ const addProfit = async () => {
       });
     };
     createSaving();
-    const body = {
-      to: child._id,
-      title: `קיבלת ${profit} ש"ח!`,
-      body: `הסכום הופקד לחשבונך בעבור: ריבית חודשית`,
-    };
-    handlePushTokens(body);
   });
 };
 
-if (date.getDate() === 23) {
+if (date.getDate() === 24) {
   addProfit();
 } else {
   console.log('Not today');
