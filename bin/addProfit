@@ -7,7 +7,7 @@ const addProfit = async () => {
   try {
     console.log('addindg profit');
     const childs = await Child.find({ revenue: { $gt: 0 } });
-    
+
     childs.forEach((child) => {
       const total = child.saving + child.profit;
       const profit = total * (child.revenue / 100);
@@ -34,3 +34,4 @@ if (date.getDate() === 24) {
 } else {
   console.log('Not today');
 }
+process.exit();
