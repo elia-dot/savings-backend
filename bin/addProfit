@@ -1,35 +1,21 @@
 #! /app/.heroku/node/bin/node
-const Child = require('../models/Child');
-const Saving = require('../models/Saving');
+const axios = require('axios');
 const date = new Date();
 
-if (date.getDate() === 24) {
+const addProfit = async () => {
   try {
-    console.log('addindg profit');
-    let childs;
-    const getChilds = async () => {
-      childs = await Child.find({ revenue: { $gt: 0 } });
-    };
-    getChilds();
-    childs.forEach((child) => {
-      const total = child.saving + child.profit;
-      const profit = total * (child.revenue / 100);
-      child.profit += profit;
-      child.save();
-
-      const createSaving = async () => {
-        await Saving.create({
-          user: child._id,
-          amount: profit,
-          description: 'monthly profit',
-        });
-      };
-      createSaving();
-    });
-    console.log('profit added');
+    const res = await axios.patch(
+      'https://goals-65106.herokuapp.com/add-profit'
+    );
+    return res.data;
   } catch (error) {
-    console.log(error);
+    console.log(error.response.data);
+    return error.response.data;
   }
+};
+
+if (date.getDate() === 24) {
+  addProfit();
 } else {
   console.log('Not today');
 }

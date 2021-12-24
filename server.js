@@ -11,6 +11,7 @@ const savingRouter = require('./routes/savingRoutes');
 const tasksRouter = require('./routes/tasksRoutes');
 const PushToken = require('./models/PushToken');
 const { handlePushTokens } = require('./utils/sentNotification');
+const Child = require('./models/Child')
 
 app.use(express.json());
 app.use(cors());
@@ -54,6 +55,37 @@ app.post('/message/task-completed', (req, res) => {
   handlePushTokens(req.body, req, res);
   console.log(req.body);
   console.log(`Received message, with title: ${req.body.title}`);
+});
+
+app.patch('/add-profit', async (req, res) => {
+  try {
+    const childs = await Child.find({ revenue: { $gt: 0 } });
+
+    childs.forEach((child) => {
+      const total = child.saving + child.profit;
+      const profit = total * (child.revenue / 100);
+      child.profit += profit;
+      child.save();
+
+      const createSaving = async () => {
+        await Saving.create({
+          user: child._id,
+          amount: profit,
+          description: 'monthly yield',
+        });
+      };
+      createSaving();
+    });
+    return res.status(200).json({
+      status: 'success',
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: 'fail',
+      error,
+    });
+  }
 });
 
 const PORT = process.env.PORT || 3000;
