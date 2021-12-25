@@ -64,7 +64,7 @@ app.patch('/add-profit', async (req, res) => {
     childs.forEach((child) => {
       const total = child.saving + child.profit;
       const profit = total * (child.revenue / 100);
-      child.profit += profit;
+      child.profit += profit.toFixed();
       child.save();
 
       const createSaving = async () => {
